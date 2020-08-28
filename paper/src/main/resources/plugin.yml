@@ -1,0 +1,5 @@
+name: ExporterPlugin
+version: 2.0.1
+author: sldk
+main: de.sldk.mc.PrometheusExporter
+website: sldk.de
