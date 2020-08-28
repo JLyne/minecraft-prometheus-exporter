@@ -1,11 +1,13 @@
 package de.sldk.mc.metrics;
 
+import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import de.sldk.mc.PrometheusExporter;
 import io.prometheus.client.Gauge;
 import org.geysermc.floodgate.FloodgateAPI;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PlayersOnlineTotal extends ServerMetric {
@@ -22,6 +24,11 @@ public class PlayersOnlineTotal extends ServerMetric {
 
     @Override
     protected void collect(RegisteredServer server) {
+        PLAYERS_ONLINE.labels(server.getServerInfo().getName(), "bedrock").set(0);
+        Arrays.stream(ProtocolVersion.values()).forEach(version -> {
+            PLAYERS_ONLINE.labels(server.getServerInfo().getName(), version.getName()).set(0);
+        });
+
         server.getPlayersConnected().stream().collect(
             Collectors.groupingBy((Player player) -> {
                 if (PrometheusExporter.getInstance().isFloodgateEnabled() && FloodgateAPI.isBedrockPlayer(player)) {
