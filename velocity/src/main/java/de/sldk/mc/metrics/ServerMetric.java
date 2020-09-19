@@ -12,10 +12,14 @@ public abstract class ServerMetric extends AbstractMetric {
 
     @Override
     public final void doCollect() {
+        clear();
+
         for (RegisteredServer server : PrometheusExporter.getInstance().getProxy().getAllServers()) {
             collect(server);
         }
     }
+
+    protected void clear() {};
 
     protected abstract void collect(RegisteredServer server);
 

@@ -19,7 +19,8 @@ import java.util.logging.Logger;
 
 @Plugin(id="velocity-prometheus-exporter", name="Velocity Prometheus Exporter",
         version="1.0-SNAPSHOT", authors = { "Jim" }, dependencies = {
-        @Dependency(id="floodgate", optional = true)
+        @Dependency(id="floodgate", optional = true),
+        @Dependency(id="vivecraft-velocity-extensions", optional = true)
 })
 public class PrometheusExporter implements ExporterPlugin {
     private final ExporterConfig config = new ExporterConfig(this);
@@ -29,6 +30,7 @@ public class PrometheusExporter implements ExporterPlugin {
     private final ProxyServer proxy;
     private final Logger logger;
     private boolean floodgateEnabled = false;
+    private boolean vivecraftEnabled = false;
 
     @Inject
     @DataDirectory
@@ -54,6 +56,9 @@ public class PrometheusExporter implements ExporterPlugin {
     private void init() {
         Optional<PluginContainer> floodgate = proxy.getPluginManager().getPlugin("floodgate");
         floodgateEnabled = floodgate.isPresent();
+
+        Optional<PluginContainer> vivecraft = proxy.getPluginManager().getPlugin("vivecraft-velocity-extensions");
+        vivecraftEnabled = vivecraft.isPresent();
 
         config.load();
         config.enableConfiguredMetrics();
@@ -87,4 +92,8 @@ public class PrometheusExporter implements ExporterPlugin {
     public boolean isFloodgateEnabled() {
         return floodgateEnabled;
     }
+
+	public boolean isVivecraftEnabled() {
+        return vivecraftEnabled;
+	}
 }
