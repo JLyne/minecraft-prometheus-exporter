@@ -17,12 +17,21 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Fil
     private final PluginConfig<Integer> port = new PluginConfig<>("port", 9225);
     private final List<MetricConfig> metrics = Arrays.asList(
             metricConfig("entities_total", true, Entities::new),
+            metricConfig("villagers_total", true, Villagers::new),
             metricConfig("living_entities_total", true, LivingEntities::new),
             metricConfig("loaded_chunks_total", true, LoadedChunks::new),
             metricConfig("jvm_memory", true, Memory::new),
             metricConfig("players_online_total", true, PlayersOnlineTotal::new),
             metricConfig("players_total", true, PlayersTotal::new),
             metricConfig("tps", true, Tps::new),
+
+            metricConfig("jvm_threads", true, Threads::new),
+            metricConfig("jvm_gc", true, GarbageCollection::new),
+
+            metricConfig("tick_duration_median", true, TickDurationMedianCollector::new),
+            metricConfig("tick_duration_average", true, TickDurationAverageCollector::new),
+            metricConfig("tick_duration_min", false, TickDurationMinCollector::new),
+            metricConfig("tick_duration_max", true, TickDurationMaxCollector::new),
 
             metricConfig("player_online", false, PlayerOnline::new),
             metricConfig("player_statistic", false, PlayerStatistics::new));

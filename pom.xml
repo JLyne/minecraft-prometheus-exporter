@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <bukkit.version>1.16.2-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.15.2-R0.1-SNAPSHOT</bukkit.version>
         <velocity.version>1.1.0-SNAPSHOT</velocity.version>
         <jetty.version>9.4.25.v20191220</jetty.version>
         <prometheus-client.version>0.8.0</prometheus-client.version>
