@@ -7,7 +7,7 @@ import org.bukkit.World;
 
 public abstract class WorldMetric extends AbstractMetric {
 
-    public WorldMetric(PrometheusExporter plugin, Collector collector) {
+    public WorldMetric(Object plugin, Collector collector) {
         super(plugin, collector);
     }
 
