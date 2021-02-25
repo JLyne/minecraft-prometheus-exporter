@@ -1,11 +1,8 @@
 package de.sldk.mc.metrics;
 
-import com.techjar.vbe.VivecraftAPI;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import de.sldk.mc.PrometheusExporter;
 import io.prometheus.client.Gauge;
-import org.geysermc.floodgate.FloodgateAPI;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,27 +21,12 @@ public class PlayersOnlineTotal extends ServerMetric {
 
     @Override
     protected void collect(RegisteredServer server) {
-        Map<String, Map<String, Long>> collection = server.getPlayersConnected().stream().collect(
-            Collectors.groupingBy((Player player) -> player.getProtocolVersion().getName(), Collectors.groupingBy((Player player) -> {
-                if(PrometheusExporter.getInstance().isVivecraftEnabled() && VivecraftAPI.isVive(player)) {
-                    return VivecraftAPI.isVR(player) ? "vivecraft" : "vivecraft-novr";
-                }
-
-                if (PrometheusExporter.getInstance().isFloodgateEnabled() && FloodgateAPI.isBedrockPlayer(player)) {
-                    return "bedrock";
-                } else {
-                    return "vanilla";
-                }
-            }, Collectors.counting()))
+        Map<String, Long> collection = server.getPlayersConnected().stream().collect(
+            Collectors.groupingBy((Player player) -> player.getProtocolVersion().getName(), Collectors.counting())
         );
 
-        PrometheusExporter.getInstance().getLogger().info(collection.toString());
-
-        collection.forEach((String version, Map<String, Long> clients) -> {
-            clients.forEach((String client, Long count) -> {
-                PLAYERS_ONLINE.labels(server.getServerInfo().getName(), version, client).set(count);
-            });
-        });
+        collection.forEach((String version, Long count) ->
+                                   PLAYERS_ONLINE.labels(server.getServerInfo().getName(), version).set(count));
     }
 
     @Override

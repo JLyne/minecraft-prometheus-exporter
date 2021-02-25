@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import de.sldk.mc.core.ExporterPlugin;
 import de.sldk.mc.config.ExporterConfig;
 import de.sldk.mc.server.MetricsServer;
+import uk.co.notnull.platformdetection.PlatformDetectionVelocity;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -19,22 +20,21 @@ import java.util.logging.Logger;
 
 @Plugin(id="velocity-prometheus-exporter", name="Velocity Prometheus Exporter",
         version="1.0-SNAPSHOT", authors = { "Jim" }, dependencies = {
-        @Dependency(id="floodgate", optional = true),
-        @Dependency(id="vivecraft-velocity-extensions", optional = true)
+        @Dependency(id="platform-detection", optional = true),
 })
 public class PrometheusExporter implements ExporterPlugin {
-    private final ExporterConfig config = new ExporterConfig(this);
+    private ExporterConfig config = null;
     private static PrometheusExporter instance;
     private MetricsServer server;
 
     private final ProxyServer proxy;
     private final Logger logger;
-    private boolean floodgateEnabled = false;
-    private boolean vivecraftEnabled = false;
+    private boolean platformDetectionEnabled = false;
 
     @Inject
     @DataDirectory
     private Path dataDirectory;
+    private PlatformDetectionVelocity platformDetection;
 
     @Inject
     public PrometheusExporter(ProxyServer proxy, Logger logger) {
@@ -48,18 +48,21 @@ public class PrometheusExporter implements ExporterPlugin {
        init();
     }
 
+    @Subscribe
     public void onProxyReload(ProxyReloadEvent event) {
         server.stopServer();
         init();
     }
 
     private void init() {
-        Optional<PluginContainer> floodgate = proxy.getPluginManager().getPlugin("floodgate");
-        floodgateEnabled = floodgate.isPresent();
+        Optional<PluginContainer> platformDetection = proxy.getPluginManager().getPlugin("platform-detection");
+        platformDetectionEnabled = platformDetection.isPresent();
 
-        Optional<PluginContainer> vivecraft = proxy.getPluginManager().getPlugin("vivecraft-velocity-extensions");
-        vivecraftEnabled = vivecraft.isPresent();
+        if(platformDetectionEnabled) {
+            this.platformDetection = (PlatformDetectionVelocity) platformDetection.get();
+        }
 
+        config = new ExporterConfig(this);
         config.load();
         config.enableConfiguredMetrics();
 
@@ -89,11 +92,11 @@ public class PrometheusExporter implements ExporterPlugin {
         return proxy;
     }
 
-    public boolean isFloodgateEnabled() {
-        return floodgateEnabled;
+    public boolean isPlatformDetectionEnabled() {
+        return platformDetectionEnabled;
     }
 
-	public boolean isVivecraftEnabled() {
-        return vivecraftEnabled;
-	}
+    public PlatformDetectionVelocity getPlatformDetection() {
+        return platformDetection;
+    }
 }

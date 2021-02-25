@@ -17,8 +17,8 @@
     </modules>
 
     <properties>
-        <bukkit.version>1.15.2-R0.1-SNAPSHOT</bukkit.version>
-        <velocity.version>1.1.0-SNAPSHOT</velocity.version>
+        <bukkit.version>1.16.5-R0.1-SNAPSHOT</bukkit.version>
+        <velocity.version>1.1.2-SNAPSHOT</velocity.version>
         <jetty.version>9.4.25.v20191220</jetty.version>
         <prometheus-client.version>0.8.0</prometheus-client.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
@@ -26,14 +26,6 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>nukkitxsnapshots</id>
-            <url>https://repo.nukkitx.com/maven-snapshots</url>
-        </repository>
-        <repository>
-            <id>nukkitxreleases</id>
-            <url>https://repo.nukkitx.com/maven-releases</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -42,12 +34,6 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.geysermc</groupId>
-            <artifactId>floodgate-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

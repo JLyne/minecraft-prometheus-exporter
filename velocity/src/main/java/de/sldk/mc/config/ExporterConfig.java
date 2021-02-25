@@ -21,7 +21,6 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
             metricConfig("jvm_memory", true, Memory::new),
             metricConfig("jvm_threads", true, Threads::new),
             metricConfig("jvm_gc", true, GarbageCollection::new),
-            metricConfig("players_online_total", true, PlayersOnlineTotal::new),
             metricConfig("players_total", true, PlayersTotal::new),
             metricConfig("player_online", false, PlayerOnline::new));
 
@@ -30,6 +29,12 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
     public ExporterConfig(PrometheusExporter plugin) {
         this.plugin = plugin;
+
+        if(plugin.isPlatformDetectionEnabled()) {
+            metrics.add(metricConfig("players_online_total", true, PlayersOnlinePlatformTotal::new));
+        } else {
+            metrics.add(metricConfig("players_online_total", true, PlayersOnlineTotal::new));
+        }
     }
 
     private static MetricConfig metricConfig(String key, boolean defaultValue, Function<PrometheusExporter, AbstractMetric> metricInitializer) {
@@ -89,6 +94,8 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
             if (Boolean.TRUE.equals(enabled)) {
                 metric.enable();
+            } else {
+                metric.disable();
             }
 
             plugin.getLogger().fine("AbstractMetric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
