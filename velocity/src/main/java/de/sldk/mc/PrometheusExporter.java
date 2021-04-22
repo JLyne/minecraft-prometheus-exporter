@@ -11,7 +11,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import de.sldk.mc.core.ExporterPlugin;
 import de.sldk.mc.config.ExporterConfig;
 import de.sldk.mc.server.MetricsServer;
-import uk.co.notnull.platformdetection.PlatformDetectionVelocity;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -34,7 +33,7 @@ public class PrometheusExporter implements ExporterPlugin {
     @Inject
     @DataDirectory
     private Path dataDirectory;
-    private PlatformDetectionVelocity platformDetection;
+    private Object platformDetection;
 
     @Inject
     public PrometheusExporter(ProxyServer proxy, Logger logger) {
@@ -59,7 +58,7 @@ public class PrometheusExporter implements ExporterPlugin {
         platformDetectionEnabled = platformDetection.isPresent();
 
         if(platformDetectionEnabled) {
-            this.platformDetection = (PlatformDetectionVelocity) platformDetection.get().getInstance().get();
+            this.platformDetection = platformDetection.get().getInstance().orElse(null);
         }
 
         config = new ExporterConfig(this);
@@ -96,7 +95,7 @@ public class PrometheusExporter implements ExporterPlugin {
         return platformDetectionEnabled;
     }
 
-    public PlatformDetectionVelocity getPlatformDetection() {
+    public Object getPlatformDetection() {
         return platformDetection;
     }
 }

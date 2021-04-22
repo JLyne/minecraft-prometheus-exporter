@@ -21,7 +21,7 @@ public class PlayersOnlinePlatformTotal extends ServerMetric {
 
     public PlayersOnlinePlatformTotal(Object plugin) {
         super(plugin, PLAYERS_ONLINE);
-        platformDetection = ((PrometheusExporter) plugin).getPlatformDetection();
+        platformDetection = (PlatformDetectionVelocity) ((PrometheusExporter) plugin).getPlatformDetection();
     }
 
     @Override
