@@ -59,7 +59,7 @@ public class PrometheusExporter implements ExporterPlugin {
         platformDetectionEnabled = platformDetection.isPresent();
 
         if(platformDetectionEnabled) {
-            this.platformDetection = (PlatformDetectionVelocity) platformDetection.get();
+            this.platformDetection = (PlatformDetectionVelocity) platformDetection.get().getInstance().get();
         }
 
         config = new ExporterConfig(this);
