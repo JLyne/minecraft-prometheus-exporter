@@ -9,6 +9,7 @@ import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -17,12 +18,12 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
     private final PluginConfig<String> host = new PluginConfig<>("host", "localhost");
     private final PluginConfig<Integer> port = new PluginConfig<>("port", 9225);
-    private final List<MetricConfig> metrics = Arrays.asList(
+    private final List<MetricConfig> metrics = new ArrayList<>(Arrays.asList(
             metricConfig("jvm_memory", true, Memory::new),
             metricConfig("jvm_threads", true, Threads::new),
             metricConfig("jvm_gc", true, GarbageCollection::new),
             metricConfig("players_total", true, PlayersTotal::new),
-            metricConfig("player_online", false, PlayerOnline::new));
+            metricConfig("player_online", false, PlayerOnline::new)));
 
     private final PrometheusExporter plugin;
     private ConfigurationNode config;

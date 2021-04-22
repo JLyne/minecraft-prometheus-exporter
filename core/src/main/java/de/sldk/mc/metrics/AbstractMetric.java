@@ -38,8 +38,10 @@ public abstract class AbstractMetric {
     }
 
     public void disable() {
-        CollectorRegistry.defaultRegistry.unregister(collector);
-        enabled = false;
+        if(enabled) {
+            CollectorRegistry.defaultRegistry.unregister(collector);
+            enabled = false;
+        }
     }
 
     public boolean isEnabled() {
