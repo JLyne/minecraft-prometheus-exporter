@@ -22,7 +22,8 @@ public class PlayersOnlineTotal extends ServerMetric {
     @Override
     protected void collect(RegisteredServer server) {
         Map<String, Long> collection = server.getPlayersConnected().stream().collect(
-            Collectors.groupingBy((Player player) -> player.getProtocolVersion().getName(), Collectors.counting())
+            Collectors.groupingBy((Player player) ->
+                                          player.getProtocolVersion().getVersionIntroducedIn(), Collectors.counting())
         );
 
         collection.forEach((String version, Long count) ->

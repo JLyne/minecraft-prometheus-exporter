@@ -3,7 +3,6 @@ package de.sldk.mc.metrics;
 import java.util.Arrays;
 
 import de.sldk.mc.PrometheusExporter;
-import org.bukkit.plugin.Plugin;
 
 import io.prometheus.client.Gauge;
 

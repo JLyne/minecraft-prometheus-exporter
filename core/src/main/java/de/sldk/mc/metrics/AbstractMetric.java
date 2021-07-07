@@ -3,6 +3,7 @@ package de.sldk.mc.metrics;
 import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
 
+@SuppressWarnings("unused")
 public abstract class AbstractMetric {
     protected final static String COMMON_PREFIX = "mc_";
 

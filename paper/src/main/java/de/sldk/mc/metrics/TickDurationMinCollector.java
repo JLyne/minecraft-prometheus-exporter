@@ -1,7 +1,6 @@
 package de.sldk.mc.metrics;
 
 import de.sldk.mc.PrometheusExporter;
-import org.bukkit.plugin.Plugin;
 
 import io.prometheus.client.Gauge;
 

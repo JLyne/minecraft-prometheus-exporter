@@ -1,6 +1,5 @@
 package de.sldk.mc.metrics;
 
-import de.sldk.mc.PrometheusExporter;
 import io.prometheus.client.Collector;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

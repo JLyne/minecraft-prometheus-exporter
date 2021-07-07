@@ -28,9 +28,9 @@ public class Entities extends WorldMetric {
             counts.compute(entity.getType(), (EntityType type, Integer value) -> value != null ? value + 1 : 1);
         }
 
-        counts.forEach((EntityType type, Integer value) -> {
-            ENTITIES.labels(world.getName(), String.valueOf(type.isAlive()),
-                            String.valueOf(type.isSpawnable()), type.getKey().getKey()).set(value);
-        });
+        counts.forEach(
+                (EntityType type, Integer value) -> ENTITIES.labels(world.getName(), String.valueOf(type.isAlive()),
+                                                                    String.valueOf(type.isSpawnable()),
+                                                                    type.getKey().getKey()).set(value));
     }
 }

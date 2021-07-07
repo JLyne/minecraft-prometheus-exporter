@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @Plugin(id="velocity-prometheus-exporter", name="Velocity Prometheus Exporter",
-        version="1.0-SNAPSHOT", authors = { "Jim" }, dependencies = {
+        version="2.2.3", authors = { "Jim" }, dependencies = {
         @Dependency(id="platform-detection", optional = true),
 })
 public class PrometheusExporter implements ExporterPlugin {

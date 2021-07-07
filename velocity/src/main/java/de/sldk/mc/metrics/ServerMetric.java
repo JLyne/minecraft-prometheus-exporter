@@ -19,7 +19,7 @@ public abstract class ServerMetric extends AbstractMetric {
         }
     }
 
-    protected void clear() {};
+    protected void clear() {}
 
     protected abstract void collect(RegisteredServer server);
 

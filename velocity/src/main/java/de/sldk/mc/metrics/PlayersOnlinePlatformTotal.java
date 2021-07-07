@@ -27,17 +27,20 @@ public class PlayersOnlinePlatformTotal extends ServerMetric {
     @Override
     protected void collect(RegisteredServer server) {
         Map<String, Map<Platform, Long>> collection = server.getPlayersConnected().stream().collect(
-            Collectors.groupingBy((Player player) -> player.getProtocolVersion().getName(), Collectors.groupingBy(
-                    platformDetection::getPlatform, Collectors.counting()))
+            Collectors.groupingBy(
+                    (Player player) -> player.getProtocolVersion().getVersionIntroducedIn(), Collectors.groupingBy(
+                            platformDetection::getPlatform, Collectors.counting()))
         );
 
-        collection.forEach((String version, Map<Platform, Long> clients) ->
-                                   clients.forEach((Platform platform, Long count) ->
-                                                           PLAYERS_ONLINE.labels(server.getServerInfo().getName(),
-                                                                                 platform.getLabel(),
-                                                                                 String.valueOf(platform.isBedrock()),
-                                                                                 String.valueOf(platform.isModded()))
-                                                                   .set(count)));
+        collection.forEach(
+                (String version, Map<Platform, Long> clients) ->
+                        clients.forEach((Platform platform, Long count) ->
+                                                PLAYERS_ONLINE.labels(server.getServerInfo().getName(),
+                                                                      version,
+                                                                      platform.getLabel(),
+                                                                      String.valueOf(platform.isBedrock()),
+                                                                      String.valueOf(platform.isModded()))
+                                                        .set(count)));
     }
 
     @Override
