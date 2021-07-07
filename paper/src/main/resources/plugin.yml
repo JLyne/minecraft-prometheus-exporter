@@ -1,6 +1,8 @@
 name: PrometheusExporter
-version: 2.2.3
-author: sldk
+version: '@project.version@'
+authors:
+  - 'Jim (NotKatuen)'
+  - 'sldk'
 main: de.sldk.mc.PrometheusExporter
 website: sldk.de
 api-version: '1.16'

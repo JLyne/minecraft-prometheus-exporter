@@ -1,0 +1,13 @@
+{
+  "id": "prometheus-exporter",
+  "name": "Prometheus Exporter",
+  "version": "@project.version@",
+  "authors": ["Jim (NotKatuen)", "sldk"],
+  "dependencies": [
+    {
+      "id": "platform-detection",
+      "optional": true
+    }
+  ],
+  "main": "de.sldk.mc.PrometheusExporter"
+}
