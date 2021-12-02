@@ -3,7 +3,6 @@
  */
 
 plugins {
-    id 'uk.co.notnull.java-conventions'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'maven-publish'
 }
@@ -15,8 +14,8 @@ dependencies {
 
 description = 'minecraft-prometheus-exporter'
 
-java.sourceCompatibility = JavaVersion.VERSION_16
-java.targetCompatibility = JavaVersion.VERSION_16
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 tasks {
     shadowJar {
