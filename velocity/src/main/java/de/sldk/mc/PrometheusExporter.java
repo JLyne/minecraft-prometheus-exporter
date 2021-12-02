@@ -46,6 +46,7 @@ public class PrometheusExporter implements ExporterPlugin {
     @Subscribe
     public void onProxyReload(ProxyReloadEvent event) {
         server.stopServer();
+        config.destroyMetrics();
         init();
     }
 

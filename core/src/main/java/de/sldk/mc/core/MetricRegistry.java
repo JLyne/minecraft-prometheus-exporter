@@ -21,6 +21,10 @@ public class MetricRegistry {
         this.metrics.add(metric);
     }
 
+    public void unregister(AbstractMetric metric) {
+        this.metrics.remove(metric);
+    }
+
     public void collectMetrics() {
         this.metrics.forEach(AbstractMetric::collect);
     }

@@ -22,6 +22,7 @@ public class PrometheusExporter extends JavaPlugin implements ExporterPlugin {
     @Override
     public void onDisable() {
         server.stopServer();
+        config.destroyMetrics();
     }
 
     @Override

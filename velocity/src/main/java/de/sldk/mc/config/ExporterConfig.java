@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 
@@ -24,6 +25,8 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
             metricConfig("jvm_gc", true, GarbageCollection::new),
             metricConfig("players_total", true, PlayersTotal::new),
             metricConfig("player_online", false, PlayerOnline::new)));
+
+    private final HashSet<AbstractMetric> registeredMetrics = new HashSet<>();
 
     private final PrometheusExporter plugin;
     private ConfigurationNode config;
@@ -88,6 +91,19 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
         }
     }
 
+    public void destroyMetrics() {
+        registeredMetrics.forEach(metric -> {
+            if(metric.isEnabled()) {
+                metric.disable();
+                plugin.getLogger().fine("AbstractMetric " + metric.getClass().getSimpleName() + " disabled");
+            }
+
+            MetricRegistry.getInstance().unregister(metric);
+        });
+
+        registeredMetrics.clear();
+    }
+
     public void enableConfiguredMetrics() {
         metrics.forEach(metricConfig -> {
             AbstractMetric metric = metricConfig.getMetric(plugin);
@@ -95,13 +111,11 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
             if (Boolean.TRUE.equals(enabled)) {
                 metric.enable();
-            } else {
-                metric.disable();
+                plugin.getLogger().fine("Metric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
             }
 
-            plugin.getLogger().fine("AbstractMetric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
-
             MetricRegistry.getInstance().register(metric);
+            registeredMetrics.add(metric);
         });
     }
 
