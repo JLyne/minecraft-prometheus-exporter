@@ -39,6 +39,7 @@ public abstract class TickDurationCollector extends AbstractMetric {
                 /* Look for the only array of longs in that class, which is tick duration */
                 for (Field field : minecraftServer.getClass().getSuperclass().getDeclaredFields()) {
                     if (field.getType().isArray() && field.getType().getComponentType().equals(long.class)) {
+                        field.setAccessible(true);
                         /* Check all the long[] items in this class, and remember the one with the most elements */
                         long[] array = (long[]) field.get(minecraftServer);
                         if (array != null && (longestArray == null || array.length > longestArray.length)) {
@@ -47,7 +48,7 @@ public abstract class TickDurationCollector extends AbstractMetric {
                     }
                 }
             } catch (Exception e) {
-                plugin.getLogger().log(Level.FINE, "Caught exception looking for tick times array: ", e);
+                plugin.getLogger().log(Level.WARNING, "Caught exception looking for tick times array: ", e);
             }
 
             if (longestArray != null) {
