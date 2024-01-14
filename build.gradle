@@ -23,6 +23,11 @@ subprojects {
         mavenLocal()
         mavenCentral()
 
+        // Adventure-bom snapshots required for velocity 3.3.0
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+        }
+
         maven {
             url = uri('https://papermc.io/repo/repository/maven-public/')
         }
@@ -33,11 +38,11 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.eclipse.jetty:jetty-server:9.4.43.v20210629'
-        implementation 'io.prometheus:simpleclient_common:0.11.0'
-        implementation 'io.prometheus:simpleclient_hotspot:0.11.0'
+        implementation 'org.eclipse.jetty:jetty-server:9.4.53.v20231009'
+        implementation 'io.prometheus:simpleclient_common:0.16.0'
+        implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
 
-        testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     }
 
     publishing {
