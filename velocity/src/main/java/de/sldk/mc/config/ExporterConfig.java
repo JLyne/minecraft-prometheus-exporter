@@ -4,8 +4,9 @@ import de.sldk.mc.PrometheusExporter;
 import de.sldk.mc.core.MetricRegistry;
 import de.sldk.mc.core.config.AbstractPluginConfig;
 import de.sldk.mc.metrics.*;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,11 +68,10 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
                 }
             }
 
-            config = YAMLConfigurationLoader.builder().setIndent(2)
-                    .setPath(configFile.toPath()).build().load();
+            config = YamlConfigurationLoader.builder().indent(2).path(configFile.toPath()).build().load();
         } catch (IOException e) {
             e.printStackTrace();
-            config = ConfigurationNode.root();
+            config = CommentedConfigurationNode.root();
         }
 
         host.setDefault(config);
@@ -83,8 +83,8 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
     public void save() {
         try {
-            YAMLConfigurationLoader.builder().setIndent(2)
-                        .setPath(new File(plugin.getDataDirectory().toFile(), "config.yml").toPath())
+            YamlConfigurationLoader.builder().indent(2)
+                    .path(new File(plugin.getDataDirectory().toFile(), "config.yml").toPath())
                     .build().save(config);
         } catch (IOException e) {
             e.printStackTrace();

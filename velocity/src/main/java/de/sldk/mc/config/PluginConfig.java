@@ -1,7 +1,9 @@
 package de.sldk.mc.config;
 
 import de.sldk.mc.core.config.AbstractPluginConfig;
-import ninja.leaping.configurate.ConfigurationNode;
+import io.leangen.geantyref.TypeToken;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class PluginConfig<T> extends AbstractPluginConfig<ConfigurationNode, T> {
     protected PluginConfig(String key, T defaultValue) {
@@ -9,13 +11,20 @@ public class PluginConfig<T> extends AbstractPluginConfig<ConfigurationNode, T> 
     }
 
     public void setDefault(ConfigurationNode config) {
-        if(config.getNode(this.key).isVirtual()) {
-            config.getNode(this.key).setValue(this.defaultValue);
+        if(config.node(this.key).virtual()) {
+            try {
+                config.node(this.key).set(this.defaultValue);
+            } catch (SerializationException ignored) {}
         }
     }
 
     @SuppressWarnings("unchecked")
     public T get(ConfigurationNode config) {
-        return (T) config.getNode(this.key).getValue(this.defaultValue);
+        try {
+            return (T) config.node(this.key).get(new TypeToken<T>(){}.getType(), defaultValue);
+
+        } catch (SerializationException e) {
+            return defaultValue;
+        }
     }
 }
