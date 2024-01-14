@@ -12,7 +12,7 @@ if (file("./build.gradle.local").exists()) {
 
 allprojects {
     group = 'uk.co.notnull'
-    version = '2.2.4'
+    version = '2.2.5'
 }
 
 subprojects {
