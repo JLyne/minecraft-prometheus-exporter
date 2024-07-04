@@ -21,7 +21,7 @@ public class PluginConfig<T> extends AbstractPluginConfig<ConfigurationNode, T> 
     @SuppressWarnings("unchecked")
     public T get(ConfigurationNode config) {
         try {
-            return (T) config.node(this.key).get(new TypeToken<T>(){}.getType(), defaultValue);
+            return (T) config.node(this.key).get(TypeToken.get(Object.class), defaultValue);
 
         } catch (SerializationException e) {
             return defaultValue;
