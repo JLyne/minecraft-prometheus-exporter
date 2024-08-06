@@ -4,7 +4,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
 }
 
@@ -19,14 +18,6 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
 
 tasks {
-    shadowJar {
-        archiveClassifier.set('')
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
-
     processResources {
         from("${project.rootDir}/src/main/resources") {
             project.properties.findAll().each {
@@ -36,12 +27,23 @@ tasks {
                         filter(ReplaceTokens, tokens: [('project.' + prop.key): prop.value])
                     }
             }
+
+            filter(ReplaceTokens, tokens: [
+                    ('jettyDependency'): jettyDependency,
+                    ('simpleclientCommonDependency'): simpleclientCommonDependency,
+                    ('simpleclientHotspotDependency'): simpleclientHotspotDependency
+            ])
         }
     }
 
     compileJava {
         options.compilerArgs += ["-Xlint:all", "-Xlint:-processing"]
         options.encoding = 'UTF-8'
+    }
+
+    // Include API classes in jar
+    jar {
+        from project(":core").sourceSets.main.output
     }
 }
 

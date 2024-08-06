@@ -4,5 +4,6 @@ authors:
   - 'Jim (AnEnragedPigeon)'
   - 'sldk'
 main: de.sldk.mc.PrometheusExporter
+loader: de.sldk.mc.PrometheusExporterLoader
 website: sldk.de
 api-version: '1.21'

@@ -33,9 +33,9 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.eclipse.jetty:jetty-server:9.4.53.v20231009'
-        implementation 'io.prometheus:simpleclient_common:0.16.0'
-        implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
+        implementation jettyDependency
+        implementation simpleclientCommonDependency
+        implementation simpleclientHotspotDependency
 
         testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     }
