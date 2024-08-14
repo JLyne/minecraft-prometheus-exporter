@@ -17,6 +17,17 @@ description = 'minecraft-prometheus-exporter'
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
 
+
+task processSource(type: Sync) {
+    from sourceSets.main.java
+    filter(ReplaceTokens, tokens: [
+            ('jettyDependency'): jettyDependency,
+            ('simpleclientCommonDependency'): simpleclientCommonDependency,
+            ('simpleclientHotspotDependency'): simpleclientHotspotDependency
+    ])
+    into "${layout.buildDirectory.get()}/src"
+}
+
 tasks {
     processResources {
         from("${project.rootDir}/src/main/resources") {
@@ -28,15 +39,13 @@ tasks {
                     }
             }
 
-            filter(ReplaceTokens, tokens: [
-                    ('jettyDependency'): jettyDependency,
-                    ('simpleclientCommonDependency'): simpleclientCommonDependency,
-                    ('simpleclientHotspotDependency'): simpleclientHotspotDependency
-            ])
+
         }
     }
 
     compileJava {
+        dependsOn(clean)
+        source = processSource.outputs
         options.compilerArgs += ["-Xlint:all", "-Xlint:-processing"]
         options.encoding = 'UTF-8'
     }

@@ -8,9 +8,6 @@ import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.Properties;
-
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public class PrometheusExporterLoader implements PluginLoader {
 
@@ -18,20 +15,9 @@ public class PrometheusExporterLoader implements PluginLoader {
 	public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
 		MavenLibraryResolver resolver = new MavenLibraryResolver();
 
-		Properties properties = new Properties();
-		try {
-			properties.load(PrometheusExporterLoader.class.getResourceAsStream("/plugin.properties"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		String jetty = properties.getProperty("jettyDependency");
-		String simpleClientCommon = properties.getProperty("simpleclientCommonDependency");
-		String simpleClientHotspot = properties.getProperty("simpleclientHotspotDependency");
-
-        resolver.addDependency(new Dependency(new DefaultArtifact(jetty), null));
-        resolver.addDependency(new Dependency(new DefaultArtifact(simpleClientCommon), null));
-        resolver.addDependency(new Dependency(new DefaultArtifact(simpleClientHotspot), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("@jettyDependency@"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("@simpleclientCommonDependency@"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("@simpleclientHotspotDependency@"), null));
 
         resolver.addRepository(new RemoteRepository.Builder("central", "default", "https://repo1.maven.org/maven2/").build());
 
