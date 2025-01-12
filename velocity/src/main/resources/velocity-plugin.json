@@ -1,8 +1,8 @@
 {
   "id": "prometheus-exporter",
   "name": "Prometheus Exporter",
-  "version": "@project.version@",
-  "authors": ["Jim (NotKatuen)", "sldk"],
+  "version": "${version}",
+  "authors": ["Jim (AnEnragedPigeon)", "sldk"],
   "dependencies": [
     {
       "id": "platform-detection",

@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/velocity/MinecraftPrometheusExporter.MinecraftPrometheusExporter-velocity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/velocity/MinecraftPrometheusExporter.MinecraftPrometheusExporter-velocity.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc/MinecraftPrometheusExporter.buildSrc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc/MinecraftPrometheusExporter.buildSrc.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/velocity/velocity.MinecraftPrometheusExporter.MinecraftPrometheusExporter-velocity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/velocity/velocity.MinecraftPrometheusExporter.MinecraftPrometheusExporter-velocity.main.iml" />
     </modules>
   </component>
 </project>
