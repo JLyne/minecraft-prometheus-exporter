@@ -1,5 +1,5 @@
 [versions]
-pluginYmlPaper = "0.6.0"
+pluginYmlPaper = "0.7.1"
 paperApi = "1.21.4-R0.1-SNAPSHOT"
 jetty = "9.4.53.v20231009"
 simpleclientCommon = "0.16.0"
@@ -7,7 +7,7 @@ simpleclientHotspot = "0.16.0"
 junit = "5.10.1"
 velocityApi = "3.4.0-SNAPSHOT"
 platformDetection = "2.2"
-shadow = "8.3.5"
+shadow = "8.3.6"
 
 [libraries]
 paperApi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paperApi" }
@@ -19,5 +19,5 @@ junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref="juni
 platformDetectionVelocity = { group = "uk.co.notnull", name = "PlatformDetection-velocity", version.ref="platformDetection" }
 
 [plugins]
-pluginYmlPaper = { id = "net.minecrell.plugin-yml.paper", version.ref = "pluginYmlPaper" }
+pluginYmlPaper = { id = "de.eldoria.plugin-yml.paper", version.ref = "pluginYmlPaper" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
