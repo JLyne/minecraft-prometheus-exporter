@@ -23,6 +23,7 @@ tasks {
 }
 
 paper {
+    name = "PrometheusExporter"
     main = "de.sldk.mc.PrometheusExporter"
     loader = "de.sldk.mc.PrometheusExporterLoader"
     generateLibrariesJson = true
