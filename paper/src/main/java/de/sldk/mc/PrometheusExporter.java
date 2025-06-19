@@ -5,7 +5,7 @@ import de.sldk.mc.config.ExporterConfig;
 import de.sldk.mc.server.MetricsServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PrometheusExporter extends JavaPlugin implements ExporterPlugin {
+public final class PrometheusExporter extends JavaPlugin implements ExporterPlugin {
     private final ExporterConfig config = new ExporterConfig(this);
     private MetricsServer server;
 
