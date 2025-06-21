@@ -43,5 +43,5 @@ public abstract class AbstractMetric {
         return enabled;
     }
 
-    abstract void initialValue();
+    protected abstract void initialValue();
 }
