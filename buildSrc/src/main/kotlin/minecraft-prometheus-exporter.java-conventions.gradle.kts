@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "uk.co.notnull"
-version = "2.2.6-SNAPSHOT"
+version = "3.0-SNAPSHOT"
 
 //https://github.com/gradle/gradle/issues/15383
 val libs = the<LibrariesForLibs>()
