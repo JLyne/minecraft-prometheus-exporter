@@ -31,10 +31,7 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Fil
             metricConfig("tick_duration_median", true, TickDurationMedianCollector::new),
             metricConfig("tick_duration_average", true, TickDurationAverageCollector::new),
             metricConfig("tick_duration_min", false, TickDurationMinCollector::new),
-            metricConfig("tick_duration_max", true, TickDurationMaxCollector::new),
-
-            metricConfig("player_online", false, PlayerOnline::new),
-            metricConfig("player_statistic", false, PlayerStatistics::new));
+            metricConfig("tick_duration_max", true, TickDurationMaxCollector::new));
 
     private final PrometheusExporter plugin;
 

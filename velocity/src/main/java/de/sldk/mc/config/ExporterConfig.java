@@ -24,8 +24,6 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
             metricConfig("jvm_memory", true, Memory::new),
             metricConfig("jvm_threads", true, Threads::new),
             metricConfig("jvm_gc", true, GarbageCollection::new),
-            metricConfig("players_total", true, PlayersTotal::new),
-            metricConfig("player_online", false, PlayerOnline::new)));
 
     private final HashSet<AbstractMetric> registeredMetrics = new HashSet<>();
 
