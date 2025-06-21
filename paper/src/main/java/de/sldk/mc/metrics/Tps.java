@@ -1,32 +1,24 @@
 package de.sldk.mc.metrics;
 
 import de.sldk.mc.PrometheusExporter;
-import io.prometheus.client.Gauge;
+import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.Bukkit;
 
 public class Tps extends AbstractMetric {
-
-    private static final Gauge TPS = Gauge.build()
+    private static final Gauge TPS = Gauge.builder()
             .name(prefix("tps"))
             .help("Server TPS (ticks per second)")
-            .create();
+            .build();
 
     public Tps(PrometheusExporter plugin) {
         super(plugin, TPS);
     }
 
-    @Override
-    public void enable() {
-        super.enable();
+    protected void initialValue() {
+        collect();
     }
 
-    @Override
-    public void disable() {
-        super.disable();
-    }
-
-    @Override
-    public void doCollect() {
+    public static void collect() {
         TPS.set(Bukkit.getServer().getTPS()[0]);
     }
 }

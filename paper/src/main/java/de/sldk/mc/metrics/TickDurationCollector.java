@@ -4,22 +4,26 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
+import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 
-import io.prometheus.client.Gauge;
-
 public abstract class TickDurationCollector extends AbstractMetric {
+    protected final Plugin plugin;
+
     /*
      * If reflection is successful, this will hold a reference directly to the
      * MinecraftServer internal tick duration tracker
      */
-    private static long[] tickDurationReference = null;
+    private static long[] tickDurationReference;
 
-    public TickDurationCollector(Plugin plugin, Gauge gauge, String name) {
+    public TickDurationCollector(Plugin plugin, Gauge gauge) {
         super(plugin, gauge);
+        this.plugin = plugin;
+    }
 
+    protected void initialValue() {
         /*
          * If there is not yet a handle to the internal tick duration buffer, try
          * to acquire one using reflection.
@@ -54,10 +58,7 @@ public abstract class TickDurationCollector extends AbstractMetric {
             if (longestArray != null) {
                 tickDurationReference = longestArray;
             } else {
-                /* No array was found, use an placeholder */
-                tickDurationReference = new long[1];
-                tickDurationReference[0] = -1;
-
+                tickDurationReference = new long[] { -1L };
                 plugin.getLogger().log(Level.WARNING, "Failed to find tick times buffer via reflection. Tick duration metrics will not be available.");
             }
         }

@@ -8,9 +8,9 @@ plugins {
 dependencies {
     implementation(project(":core"))
     compileOnly(libs.paperApi)
-    paperLibrary(libs.jetty)
-    paperLibrary(libs.simpleclientCommon)
-    paperLibrary(libs.simpleclientHotspot)
+    paperLibrary(libs.prometheusCore)
+    paperLibrary(libs.prometheusJVM)
+    paperLibrary(libs.prometheusExporterHttp)
 }
 
 description = "minecraft-prometheus-exporter"

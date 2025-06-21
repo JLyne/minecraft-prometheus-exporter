@@ -1,7 +1,7 @@
 package de.sldk.mc.metrics;
 
 import de.sldk.mc.PrometheusExporter;
-import io.prometheus.client.Gauge;
+import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -10,18 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Entities extends WorldMetric {
-    private static final Gauge ENTITIES = Gauge.build()
-            .name(prefix("entities_total"))
+    private static final Gauge ENTITIES = Gauge.builder()
+            .name(prefix("entities"))
             .help("Entities loaded per world")
             .labelNames("world", "alive", "spawnable", "type")
-            .create();
+            .build();
 
     public Entities(PrometheusExporter plugin) {
         super(plugin, ENTITIES);
     }
 
     @Override
-    public void collect(World world) {
+    protected void initialValue(World world) {
         Map<EntityType, Integer> counts = new HashMap<>();
 
         for (Entity entity : world.getEntities()) {
@@ -29,8 +29,20 @@ public class Entities extends WorldMetric {
         }
 
         counts.forEach(
-                (EntityType type, Integer value) -> ENTITIES.labels(world.getName(), String.valueOf(type.isAlive()),
+                (EntityType type, Integer value) -> ENTITIES.labelValues(world.getName(), String.valueOf(type.isAlive()),
                                                                     String.valueOf(type.isSpawnable()),
                                                                     type.getKey().getKey()).set(value));
+    }
+
+    public static void addEntity(EntityType type, World world) {
+        ENTITIES.labelValues(world.getName(),
+                                      String.valueOf(type.isAlive()),
+                                      String.valueOf(type.isSpawnable()), type.getKey().getKey()).inc();
+    }
+
+    public static void removeEntity(EntityType type, World world) {
+        ENTITIES.labelValues(world.getName(),
+                                      String.valueOf(type.isAlive()),
+                                      String.valueOf(type.isSpawnable()), type.getKey().getKey()).dec();
     }
 }

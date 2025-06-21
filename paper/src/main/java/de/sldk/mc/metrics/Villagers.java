@@ -1,12 +1,11 @@
 package de.sldk.mc.metrics;
 
-import io.prometheus.client.Gauge;
+import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.World;
 import org.bukkit.entity.Villager;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -21,60 +20,34 @@ import java.util.stream.Collectors;
  * </ul>
  */
 public class Villagers extends WorldMetric {
-
-    private static final Gauge VILLAGERS = Gauge.build()
-            .name(prefix("villagers_total"))
-            .help("Villagers total count, labelled by world, type, profession, and level")
-            .labelNames("world", "type", "profession", "level")
-            .create();
+    private static final Gauge VILLAGERS = Gauge.builder()
+            .name(prefix("villagers"))
+            .help("Villagers total count, labelled by world and profession")
+            .labelNames("world", "profession")
+            .build();
 
     public Villagers(Plugin plugin) {
         super(plugin, VILLAGERS);
     }
 
     @Override
-    public void collect(World world) {
-        Map<VillagerGrouping, Long> mapVillagerGroupingToCount = world
+    protected void initialValue(World world) {
+        Map<Villager.Profession, Long> mapVillagerGroupingToCount = world
                 .getEntitiesByClass(Villager.class).stream()
-                .collect(Collectors.groupingBy(VillagerGrouping::new, Collectors.counting()));
+                .collect(Collectors.groupingBy(Villager::getProfession, Collectors.counting()));
 
-        mapVillagerGroupingToCount.forEach((grouping, count) ->
+        mapVillagerGroupingToCount.forEach((profession, count) ->
                 VILLAGERS
-                        .labels(world.getName(),
-                                grouping.type.getKey().getKey(),
-                                grouping.profession.getKey().getKey(),
-                                Integer.toString(grouping.level))
+                        .labelValues(world.getName(), profession.getKey().getKey())
                         .set(count)
         );
     }
 
-    /**
-     * Class used to group villagers together before summation.
-     */
-    private static class VillagerGrouping {
-        private final Villager.Type type;
-        private final Villager.Profession profession;
-        private final int level;
+    public static void addVillager(World world, Villager.Profession profession) {
+        VILLAGERS.labelValues(world.getName(), profession.getKey().getKey()).inc();
+    }
 
-        VillagerGrouping(Villager villager) {
-            this.type = villager.getVillagerType();
-            this.profession = villager.getProfession();
-            this.level = villager.getVillagerLevel();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            VillagerGrouping that = (VillagerGrouping) o;
-            return level == that.level &&
-                    type == that.type &&
-                    profession == that.profession;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(type, profession, level);
-        }
+    public static void removeVillager(World world, Villager.Profession profession) {
+        VILLAGERS.labelValues(world.getName(), profession.getKey().getKey()).dec();
     }
 }

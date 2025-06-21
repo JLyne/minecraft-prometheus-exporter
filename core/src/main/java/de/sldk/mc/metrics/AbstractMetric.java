@@ -1,7 +1,7 @@
 package de.sldk.mc.metrics;
 
-import io.prometheus.client.Collector;
-import io.prometheus.client.CollectorRegistry;
+import io.prometheus.metrics.model.registry.Collector;
+import io.prometheus.metrics.model.registry.PrometheusRegistry;
 
 @SuppressWarnings("unused")
 public abstract class AbstractMetric {
@@ -12,35 +12,29 @@ public abstract class AbstractMetric {
 
     protected boolean enabled = false;
 
-    protected AbstractMetric(Object plugin, Collector collector) {
+    protected AbstractMetric(Object plugin, Collector metric) {
         this.plugin = plugin;
-        this.collector = collector;
+        this.collector = metric;
+        initialValue();
     }
 
     protected Object getPlugin() {
         return plugin;
     }
 
-    public void collect() {
-        if (enabled) {
-            doCollect();
-        }
-    }
-
-    protected abstract void doCollect();
-
     protected static String prefix(String name) {
         return COMMON_PREFIX + name;
     }
 
     public void enable() {
-        CollectorRegistry.defaultRegistry.register(collector);
+        PrometheusRegistry.defaultRegistry.register(collector);
+        System.out.println(PrometheusRegistry.defaultRegistry);
         enabled = true;
     }
 
     public void disable() {
         if(enabled) {
-            CollectorRegistry.defaultRegistry.unregister(collector);
+            PrometheusRegistry.defaultRegistry.unregister(collector);
             enabled = false;
         }
     }
@@ -48,4 +42,6 @@ public abstract class AbstractMetric {
     public boolean isEnabled() {
         return enabled;
     }
+
+    abstract void initialValue();
 }

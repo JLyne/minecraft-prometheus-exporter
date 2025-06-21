@@ -1,23 +1,30 @@
 package de.sldk.mc.metrics;
 
 import de.sldk.mc.PrometheusExporter;
-import io.prometheus.client.Gauge;
+import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.World;
 
 public class PlayersOnlineTotal extends WorldMetric {
-
-    private static final Gauge PLAYERS_ONLINE = Gauge.build()
-            .name(prefix("players_online_total"))
+    private static final Gauge PLAYERS_ONLINE = Gauge.builder()
+            .name(prefix("players_online"))
             .help("Players currently online per world")
             .labelNames("world")
-            .create();
+            .build();
 
     public PlayersOnlineTotal(PrometheusExporter plugin) {
         super(plugin, PLAYERS_ONLINE);
     }
 
     @Override
-    protected void collect(World world) {
-        PLAYERS_ONLINE.labels(world.getName()).set(world.getPlayers().size());
+    protected void initialValue(World world) {
+        PLAYERS_ONLINE.labelValues(world.getName()).set(world.getPlayers().size());
+    }
+
+    public static void addPlayer(World world) {
+        PLAYERS_ONLINE.labelValues(world.getName()).inc();
+    }
+
+    public static void removePlayer(World world) {
+        PLAYERS_ONLINE.labelValues(world.getName()).dec();
     }
 }

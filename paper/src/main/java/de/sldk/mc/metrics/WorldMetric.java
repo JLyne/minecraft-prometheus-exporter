@@ -1,6 +1,6 @@
 package de.sldk.mc.metrics;
 
-import io.prometheus.client.Collector;
+import io.prometheus.metrics.model.registry.Collector;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -11,12 +11,11 @@ public abstract class WorldMetric extends AbstractMetric {
     }
 
     @Override
-    public final void doCollect() {
+    protected final void initialValue() {
         for (World world : Bukkit.getWorlds()) {
-            collect(world);
+            initialValue(world);
         }
     }
 
-    protected abstract void collect(World world);
-
+    protected abstract void initialValue(World world);
 }

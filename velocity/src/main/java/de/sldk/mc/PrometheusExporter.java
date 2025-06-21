@@ -3,14 +3,14 @@ package de.sldk.mc;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
-import com.velocitypowered.api.plugin.Dependency;
-import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import de.sldk.mc.core.ExporterPlugin;
 import de.sldk.mc.config.ExporterConfig;
-import de.sldk.mc.server.MetricsServer;
+import de.sldk.mc.core.server.MetricsServer;
+import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -45,9 +45,21 @@ public class PrometheusExporter implements ExporterPlugin {
 
     @Subscribe
     public void onProxyReload(ProxyReloadEvent event) {
-        server.stopServer();
+        if (server != null) {
+            server.stopServer();
+        }
+
         config.destroyMetrics();
         init();
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent event) {
+        if (server != null) {
+            server.stopServer();
+        }
+
+        config.destroyMetrics();
     }
 
     private void init() {
@@ -58,6 +70,7 @@ public class PrometheusExporter implements ExporterPlugin {
             this.platformDetection = platformDetection.get().getInstance().orElse(null);
         }
 
+        JvmMetrics.builder().register();
         config = new ExporterConfig(this);
         config.load();
         config.enableConfiguredMetrics();

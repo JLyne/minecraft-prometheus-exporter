@@ -1,22 +1,21 @@
 package de.sldk.mc.metrics;
 
 import de.sldk.mc.PrometheusExporter;
-
-import io.prometheus.client.Gauge;
+import io.prometheus.metrics.core.metrics.Gauge;
+import io.prometheus.metrics.model.snapshots.Unit;
 
 public class TickDurationAverageCollector extends TickDurationCollector {
-    private static final String NAME = "tick_duration_average";
-
-    private static final Gauge TD = Gauge.build()
-            .name(prefix(NAME))
-            .help("Average duration of server tick (nanoseconds)")
-            .create();
+    private static final Gauge TD = Gauge.builder()
+            .name(prefix("tick_duration_average"))
+            .help("Average duration of server tick")
+            .unit(Unit.SECONDS)
+            .build();
 
     public TickDurationAverageCollector(PrometheusExporter plugin) {
-        super(plugin, TD, NAME);
+        super(plugin, TD);
     }
 
-    private long getTickDurationAverage() {
+    private static long getTickDurationAverage() {
         long sum = 0;
         long[] durations = getTickDurations();
         for (Long val : durations) {
@@ -25,8 +24,12 @@ public class TickDurationAverageCollector extends TickDurationCollector {
         return sum / durations.length;
     }
 
-    @Override
-    public void doCollect() {
-        TD.set(getTickDurationAverage());
+    protected void initialValue() {
+        super.initialValue();
+        collect();
+    }
+
+    public static void collect() {
+        TD.set(Unit.nanosToSeconds(getTickDurationAverage()));
     }
 }

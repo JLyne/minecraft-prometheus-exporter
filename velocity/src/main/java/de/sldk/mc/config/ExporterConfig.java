@@ -1,9 +1,11 @@
 package de.sldk.mc.config;
 
 import de.sldk.mc.PrometheusExporter;
-import de.sldk.mc.core.MetricRegistry;
 import de.sldk.mc.core.config.AbstractPluginConfig;
-import de.sldk.mc.metrics.*;
+import de.sldk.mc.metrics.AbstractMetric;
+import de.sldk.mc.metrics.PlayersOnlinePlatformTotal;
+import de.sldk.mc.metrics.PlayersOnlineTotal;
+import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -11,7 +13,6 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
@@ -20,10 +21,7 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
     private final PluginConfig<String> host = new PluginConfig<>("host", "localhost");
     private final PluginConfig<Integer> port = new PluginConfig<>("port", 9225);
-    private final List<MetricConfig> metrics = new ArrayList<>(Arrays.asList(
-            metricConfig("jvm_memory", true, Memory::new),
-            metricConfig("jvm_threads", true, Threads::new),
-            metricConfig("jvm_gc", true, GarbageCollection::new),
+    private final List<MetricConfig> metrics = new ArrayList<>();
 
     private final HashSet<AbstractMetric> registeredMetrics = new HashSet<>();
 
@@ -34,9 +32,9 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
         this.plugin = plugin;
 
         if(plugin.isPlatformDetectionEnabled()) {
-            metrics.add(metricConfig("players_online_total", true, PlayersOnlinePlatformTotal::new));
+            metrics.add(metricConfig("players_online", true, PlayersOnlinePlatformTotal::new));
         } else {
-            metrics.add(metricConfig("players_online_total", true, PlayersOnlineTotal::new));
+            metrics.add(metricConfig("players_online", true, PlayersOnlineTotal::new));
         }
     }
 
@@ -95,14 +93,14 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
                 metric.disable();
                 plugin.getLogger().fine("AbstractMetric " + metric.getClass().getSimpleName() + " disabled");
             }
-
-            MetricRegistry.getInstance().unregister(metric);
         });
 
         registeredMetrics.clear();
     }
 
     public void enableConfiguredMetrics() {
+        JvmMetrics.builder().register();
+
         metrics.forEach(metricConfig -> {
             AbstractMetric metric = metricConfig.getMetric(plugin);
             Boolean enabled = get(metricConfig);
@@ -112,7 +110,6 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
                 plugin.getLogger().fine("Metric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
             }
 
-            MetricRegistry.getInstance().register(metric);
             registeredMetrics.add(metric);
         });
     }

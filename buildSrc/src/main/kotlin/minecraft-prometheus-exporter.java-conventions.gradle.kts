@@ -12,9 +12,6 @@ version = "2.2.6-SNAPSHOT"
 val libs = the<LibrariesForLibs>()
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
@@ -22,12 +19,14 @@ repositories {
     maven {
         url = uri("https://repo.not-null.co.uk/releases/")
     }
+
+    mavenLocal()
 }
 
 dependencies {
-    implementation(libs.jetty)
-    implementation(libs.simpleclientCommon)
-    implementation(libs.simpleclientHotspot)
+    implementation(libs.prometheusJVM)
+    implementation(libs.prometheusCore)
+    implementation(libs.prometheusExporterHttp)
     testImplementation(libs.junit)
 }
 

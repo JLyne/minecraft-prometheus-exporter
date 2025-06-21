@@ -1,48 +1,50 @@
 package de.sldk.mc.config;
 
 import de.sldk.mc.PrometheusExporter;
-import de.sldk.mc.core.MetricRegistry;
 import de.sldk.mc.core.config.AbstractPluginConfig;
 import de.sldk.mc.metrics.AbstractMetric;
-import de.sldk.mc.metrics.*;
+import de.sldk.mc.metrics.Entities;
+import de.sldk.mc.metrics.LoadedChunks;
+import de.sldk.mc.metrics.PlayersOnlineTotal;
+import de.sldk.mc.metrics.PlayersTotal;
+import de.sldk.mc.metrics.TickDurationAverageCollector;
+import de.sldk.mc.metrics.TickDurationMaxCollector;
+import de.sldk.mc.metrics.TickDurationMedianCollector;
+import de.sldk.mc.metrics.TickDurationMinCollector;
+import de.sldk.mc.metrics.Tps;
+import de.sldk.mc.metrics.Villagers;
+import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
+import io.prometheus.metrics.model.registry.PrometheusRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<FileConfiguration> {
 
     private final PluginConfig<String> host = new PluginConfig<>("host", "localhost");
     private final PluginConfig<Integer> port = new PluginConfig<>("port", 9225);
-    private final List<MetricConfig> metrics = Arrays.asList(
-            metricConfig("entities_total", true, Entities::new),
-            metricConfig("villagers_total", true, Villagers::new),
-            metricConfig("loaded_chunks_total", true, LoadedChunks::new),
-            metricConfig("jvm_memory", true, Memory::new),
-            metricConfig("players_online_total", true, PlayersOnlineTotal::new),
-            metricConfig("players_total", true, PlayersTotal::new),
-            metricConfig("tps", true, Tps::new),
-
-            metricConfig("jvm_threads", true, Threads::new),
-            metricConfig("jvm_gc", true, GarbageCollection::new),
-
-            metricConfig("tick_duration_median", true, TickDurationMedianCollector::new),
-            metricConfig("tick_duration_average", true, TickDurationAverageCollector::new),
-            metricConfig("tick_duration_min", false, TickDurationMinCollector::new),
-            metricConfig("tick_duration_max", true, TickDurationMaxCollector::new));
+    private final List<MetricConfig> metrics = new ArrayList<>();
 
     private final PrometheusExporter plugin;
 
-    private final HashSet<AbstractMetric> registeredMetrics = new HashSet<>();
-
     public ExporterConfig(PrometheusExporter plugin) {
         this.plugin = plugin;
+
+        metrics.add(metricConfig("entities", true, new Entities(plugin)));
+        metrics.add(metricConfig("villagers", true, new Villagers(plugin)));
+        metrics.add(metricConfig("loaded_chunks", true, new LoadedChunks(plugin)));
+        metrics.add(metricConfig("players_online", true, new PlayersOnlineTotal(plugin)));
+        metrics.add(metricConfig("players", false, new PlayersTotal(plugin)));
+        metrics.add(metricConfig("tps", true, new Tps(plugin)));
+        metrics.add(metricConfig("tick_duration_median", false, new TickDurationMedianCollector(plugin)));
+        metrics.add(metricConfig("tick_duration_average", true, new TickDurationAverageCollector(plugin)));
+        metrics.add(metricConfig("tick_duration_min", true, new TickDurationMinCollector(plugin)));
+        metrics.add(metricConfig("tick_duration_max", true, new TickDurationMaxCollector(plugin)));
     }
 
-    private static MetricConfig metricConfig(String key, boolean defaultValue, Function<PrometheusExporter, AbstractMetric> metricInitializer) {
-        return new MetricConfig(key, defaultValue, metricInitializer);
+    private static MetricConfig metricConfig(String key, boolean defaultValue, AbstractMetric metric) {
+        return new MetricConfig(key, defaultValue, metric);
     }
 
     @Override
@@ -73,30 +75,30 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Fil
     }
 
     public void destroyMetrics() {
-        registeredMetrics.forEach(metric -> {
+        metrics.forEach(metricConfig -> {
+            AbstractMetric metric = metricConfig.getMetric();
+
             if(metric.isEnabled()) {
                 metric.disable();
-                plugin.getLogger().fine("AbstractMetric " + metric.getClass().getSimpleName() + " disabled");
+                plugin.getLogger().info("AbstractMetric " + metric.getClass().getSimpleName() + " disabled");
             }
-
-            MetricRegistry.getInstance().unregister(metric);
         });
-
-        registeredMetrics.clear();
     }
 
     public void enableConfiguredMetrics() {
+        JvmMetrics.builder().register();
+
         metrics.forEach(metricConfig -> {
-            AbstractMetric metric = metricConfig.getMetric(plugin);
+            AbstractMetric metric = metricConfig.getMetric();
             Boolean enabled = get(metricConfig);
 
-            if (Boolean.TRUE.equals(enabled)) {
-                metric.enable();
-                plugin.getLogger().fine("Metric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
-            }
+            plugin.getLogger().info(String.valueOf(enabled));
 
-            MetricRegistry.getInstance().register(metric);
-            registeredMetrics.add(metric);
+            if (Boolean.TRUE.equals(enabled)) {
+                System.out.println(PrometheusRegistry.defaultRegistry);
+                metric.enable();
+                plugin.getLogger().info("Metric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
+            }
         });
     }
 
