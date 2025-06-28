@@ -92,10 +92,7 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Fil
             AbstractMetric metric = metricConfig.getMetric();
             Boolean enabled = get(metricConfig);
 
-            plugin.getLogger().info(String.valueOf(enabled));
-
             if (Boolean.TRUE.equals(enabled)) {
-                System.out.println(PrometheusRegistry.defaultRegistry);
                 metric.enable();
                 plugin.getLogger().info("Metric " + metric.getClass().getSimpleName() + " enabled: " + enabled);
             }

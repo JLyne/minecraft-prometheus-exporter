@@ -28,7 +28,6 @@ public abstract class AbstractMetric {
 
     public void enable() {
         PrometheusRegistry.defaultRegistry.register(collector);
-        System.out.println(PrometheusRegistry.defaultRegistry);
         enabled = true;
     }
 
