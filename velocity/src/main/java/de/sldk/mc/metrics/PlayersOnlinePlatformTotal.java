@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class PlayersOnlinePlatformTotal extends AbstractMetric {
     private static final GaugeWithCallback PLAYERS_ONLINE = GaugeWithCallback.builder()
-            .name(prefix("players_online_total"))
+            .name(prefix("players_online"))
             .help("Players currently online by server and version")
             .labelNames("server", "version", "client", "bedrock", "modded")
             .callback(callback -> Util.collectForServers(callback, PlayersOnlinePlatformTotal::collect))
