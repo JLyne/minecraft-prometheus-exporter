@@ -1,5 +1,3 @@
-import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-
 plugins {
     id("minecraft-prometheus-exporter.java-conventions")
     alias(libs.plugins.pluginYmlPaper)
@@ -19,6 +17,10 @@ tasks {
     // Include core classes in jar
     jar {
         from(project(":core").sourceSets.main.get().output)
+    }
+
+    generatePaperPluginDescription {
+        useDefaultCentralProxy()
     }
 }
 
