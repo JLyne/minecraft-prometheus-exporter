@@ -14,7 +14,6 @@ import de.sldk.mc.metrics.TickDurationMinCollector;
 import de.sldk.mc.metrics.Tps;
 import de.sldk.mc.metrics.Villagers;
 import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
-import io.prometheus.metrics.model.registry.PrometheusRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
