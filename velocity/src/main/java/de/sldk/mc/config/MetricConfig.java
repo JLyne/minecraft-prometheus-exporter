@@ -12,7 +12,7 @@ public class MetricConfig extends PluginConfig<Boolean> {
     private final Function<PrometheusExporter, AbstractMetric> metricInitializer;
 
     protected MetricConfig(String key, Boolean defaultValue, Function<PrometheusExporter, AbstractMetric> metricInitializer) {
-        super(CONFIG_PATH_PREFIX + "." + key, defaultValue);
+        super(new String[] {CONFIG_PATH_PREFIX, key}, defaultValue);
         this.metricInitializer = metricInitializer;
     }
 
