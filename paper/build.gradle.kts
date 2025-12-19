@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+
 plugins {
     id("minecraft-prometheus-exporter.java-conventions")
     alias(libs.plugins.pluginYmlPaper)
@@ -28,6 +30,7 @@ paper {
     name = "PrometheusExporter"
     main = "de.sldk.mc.PrometheusExporter"
     loader = "de.sldk.mc.PrometheusExporterLoader"
+    load = BukkitPluginDescription.PluginLoadOrder.STARTUP
     generateLibrariesJson = true
     apiVersion = libs.versions.paperApi.get().replace(Regex("\\-R\\d.\\d-SNAPSHOT"), "")
     authors = listOf("Jim (AnEnragedPigeon)", "sldk")
