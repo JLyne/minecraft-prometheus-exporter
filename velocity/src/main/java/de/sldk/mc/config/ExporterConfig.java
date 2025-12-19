@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<ConfigurationNode> {
 
@@ -66,7 +67,7 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
 
             config = YamlConfigurationLoader.builder().indent(2).path(configFile.toPath()).build().load();
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.SEVERE, "Failed to log config", e);
             config = CommentedConfigurationNode.root();
         }
 
@@ -83,7 +84,7 @@ public class ExporterConfig implements de.sldk.mc.core.config.ExporterConfig<Con
                     .path(new File(plugin.getDataDirectory().toFile(), "config.yml").toPath())
                     .build().save(config);
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.SEVERE, "Failed to save config", e);
         }
     }
 
