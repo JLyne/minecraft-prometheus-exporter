@@ -3,6 +3,7 @@ package de.sldk.mc.metrics;
 import de.sldk.mc.PrometheusExporter;
 import io.prometheus.metrics.core.metrics.Gauge;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayersOnlineTotal extends WorldMetric {
     private static final Gauge PLAYERS_ONLINE = Gauge.builder()
@@ -16,11 +17,11 @@ public class PlayersOnlineTotal extends WorldMetric {
     }
 
     @Override
-    protected void initialValue(World world) {
+    protected void initialValue(@NotNull World world) {
         PLAYERS_ONLINE.labelValues(world.getName()).set(world.getPlayers().size());
     }
 
-    public static void addPlayer(World world) {
+    public static void addPlayer(@NotNull World world) {
         PLAYERS_ONLINE.labelValues(world.getName()).inc();
     }
 

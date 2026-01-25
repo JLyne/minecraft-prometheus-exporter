@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -109,6 +110,14 @@ public final class PrometheusExporter extends JavaPlugin implements ExporterPlug
 		if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
 			PlayersOnlineTotal.removePlayer(event.getFrom().getWorld());
 			PlayersOnlineTotal.addPlayer(event.getTo().getWorld());
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		if (!event.getPlayer().getLocation().getWorld().equals(event.getRespawnLocation().getWorld())) {
+			PlayersOnlineTotal.removePlayer(event.getPlayer().getLocation().getWorld());
+			PlayersOnlineTotal.addPlayer(event.getRespawnLocation().getWorld());
 		}
 	}
 
