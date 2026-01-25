@@ -1,5 +1,6 @@
 package de.sldk.mc;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
@@ -12,7 +13,6 @@ import de.sldk.mc.config.ExporterConfig;
 import de.sldk.mc.core.server.MetricsServer;
 import io.prometheus.metrics.instrumentation.jvm.JvmMetrics;
 
-import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
