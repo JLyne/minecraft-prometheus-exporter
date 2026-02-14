@@ -1,7 +1,7 @@
 [versions]
 pluginYmlPaper = "0.8.0"
 paperApi = "1.21.11-R0.1-SNAPSHOT"
-prometheus = "1.4.3"
+prometheus = "1.5.0"
 junit = "5.10.1"
 velocityApi = "3.5.0-SNAPSHOT"
 platformDetection = "2.2"
