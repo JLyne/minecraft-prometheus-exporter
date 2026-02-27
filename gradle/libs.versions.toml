@@ -5,7 +5,7 @@ prometheus = "1.5.0"
 junit = "5.10.1"
 velocityApi = "3.5.0-SNAPSHOT"
 platformDetection = "2.2"
-shadow = "9.3.1"
+shadow = "9.3.2"
 
 [libraries]
 paperApi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paperApi" }
