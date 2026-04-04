@@ -32,6 +32,6 @@ paper {
     loader = "de.sldk.mc.PrometheusExporterLoader"
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP
     generateLibrariesJson = true
-    apiVersion = libs.versions.paperApi.get().replace(Regex("\\-R\\d.\\d-SNAPSHOT"), "")
+    apiVersion = libs.versions.paperApi.get().replace(".build.+", "")
     authors = listOf("Jim (AnEnragedPigeon)", "sldk")
 }
