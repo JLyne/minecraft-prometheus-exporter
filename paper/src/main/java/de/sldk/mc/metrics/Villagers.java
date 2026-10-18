@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * <p>
  * Labelled by
  * <ul>
- *     <li> World ({@link World#getName()})
+ *     <li> World ({@link World#key()})})
  *     <li> Type, e.g. 'desert', 'plains ({@link org.bukkit.entity.Villager.Type})
  *     <li> Profession, e.g. 'fisherman', 'farmer', or 'none' ({@link org.bukkit.entity.Villager.Profession})
  *     <li> Level ({@link Villager#getVillagerLevel()})
@@ -38,16 +38,16 @@ public class Villagers extends WorldMetric {
 
         mapVillagerGroupingToCount.forEach((profession, count) ->
                 VILLAGERS
-                        .labelValues(world.getName(), profession.getKey().getKey())
+                        .labelValues(world.key().asString(), profession.getKey().getKey())
                         .set(count)
         );
     }
 
     public static void addVillager(World world, Villager.Profession profession) {
-        VILLAGERS.labelValues(world.getName(), profession.getKey().getKey()).inc();
+        VILLAGERS.labelValues(world.key().asString(), profession.getKey().getKey()).inc();
     }
 
     public static void removeVillager(World world, Villager.Profession profession) {
-        VILLAGERS.labelValues(world.getName(), profession.getKey().getKey()).dec();
+        VILLAGERS.labelValues(world.key().asString(), profession.getKey().getKey()).dec();
     }
 }

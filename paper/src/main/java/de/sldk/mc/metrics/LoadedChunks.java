@@ -17,14 +17,14 @@ public class LoadedChunks extends WorldMetric {
 
     @Override
     protected void initialValue(World world) {
-        LOADED_CHUNKS.labelValues(world.getName()).set(world.getLoadedChunks().length);
+        LOADED_CHUNKS.labelValues(world.key().asString()).set(world.getLoadedChunks().length);
     }
 
     public static void addChunk(World world) {
-        LOADED_CHUNKS.labelValues(world.getName()).inc();
+        LOADED_CHUNKS.labelValues(world.key().asString()).inc();
     }
 
     public static void removeChunk(World world) {
-        LOADED_CHUNKS.labelValues(world.getName()).dec();
+        LOADED_CHUNKS.labelValues(world.key().asString()).dec();
     }
 }

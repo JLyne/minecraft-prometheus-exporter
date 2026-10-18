@@ -18,14 +18,14 @@ public class PlayersOnlineTotal extends WorldMetric {
 
     @Override
     protected void initialValue(@NotNull World world) {
-        PLAYERS_ONLINE.labelValues(world.getName()).set(world.getPlayers().size());
+        PLAYERS_ONLINE.labelValues(world.key().asString()).set(world.getPlayers().size());
     }
 
     public static void addPlayer(@NotNull World world) {
-        PLAYERS_ONLINE.labelValues(world.getName()).inc();
+        PLAYERS_ONLINE.labelValues(world.key().asString()).inc();
     }
 
     public static void removePlayer(World world) {
-        PLAYERS_ONLINE.labelValues(world.getName()).dec();
+        PLAYERS_ONLINE.labelValues(world.key().asString()).dec();
     }
 }

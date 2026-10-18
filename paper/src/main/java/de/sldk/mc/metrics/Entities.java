@@ -29,19 +29,19 @@ public class Entities extends WorldMetric {
         }
 
         counts.forEach(
-                (EntityType type, Integer value) -> ENTITIES.labelValues(world.getName(), String.valueOf(type.isAlive()),
+                (EntityType type, Integer value) -> ENTITIES.labelValues(world.key().asString(), String.valueOf(type.isAlive()),
                                                                     String.valueOf(type.isSpawnable()),
                                                                     type.getKey().getKey()).set(value));
     }
 
     public static void addEntity(EntityType type, World world) {
-        ENTITIES.labelValues(world.getName(),
+        ENTITIES.labelValues(world.key().asString(),
                                       String.valueOf(type.isAlive()),
                                       String.valueOf(type.isSpawnable()), type.getKey().getKey()).inc();
     }
 
     public static void removeEntity(EntityType type, World world) {
-        ENTITIES.labelValues(world.getName(),
+        ENTITIES.labelValues(world.key().asString(),
                                       String.valueOf(type.isAlive()),
                                       String.valueOf(type.isSpawnable()), type.getKey().getKey()).dec();
     }
