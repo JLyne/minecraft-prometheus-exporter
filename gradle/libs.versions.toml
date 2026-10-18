@@ -3,7 +3,7 @@ pluginYmlPaper = "0.9.0"
 paperApi = "26.3.build.+"
 prometheus = "1.10.0"
 junit = "5.10.1"
-velocityApi = "4.2.1-SNAPSHOT"
+velocityApi = "4.3.0"
 platformDetection = "2.2"
 shadow = "9.6.1"
 
